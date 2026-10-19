@@ -1,0 +1,6 @@
+{
+  "name": "BD SHOP — Premium E-commerce Platform",
+  "description": "Production-ready e-commerce platform with animated storefront, powerful admin dashboard, instant product synchronization, and high-performance caching.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

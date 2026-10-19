@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --brand-navy: #0B132B;
+    --brand-navy-light: #1C2541;
+    --brand-cyan: #00F0FF;
+    --brand-cyan-muted: #0891B2;
+    --temu-orange: #FA5D00;
+    --temu-orange-hover: #E04D00;
+    --temu-orange-light: #FFF2EB;
+    --temu-yellow: #FFD200;
+  }
+
+  body {
+    font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+    color: #222222;
+    background-color: #F6F6F6;
+    overflow-x: hidden;
+  }
+
+  /* Admin dark mode override */
+  .admin-theme {
+    color: #F8FAFC;
+    background-color: #070D1E;
+  }
+
+  h1, h2, h3, h4, h5, h6, .font-display {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    letter-spacing: -0.015em;
+  }
+
+  code, pre, .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F1F1;
+}
+::-webkit-scrollbar-thumb {
+  background: #D1D5DB;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #FA5D00;
+}
+
+/* Hide scrollbar for category horizontal scroll */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.03); }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+
+@keyframes flash-glow {
+  0%, 100% { box-shadow: 0 0 10px rgba(250, 93, 0, 0.2); }
+  50% { box-shadow: 0 0 20px rgba(250, 93, 0, 0.45); }
+}
+
+.animate-flash-glow {
+  animation: flash-glow 2s ease-in-out infinite;
+}
