@@ -15,7 +15,7 @@ export const StoreCatalog: React.FC<StoreCatalogProps> = ({
   selectedCategorySlug,
   onClearCategoryFilter
 }) => {
-  const { publishedProducts, categories, searchQuery, setSearchQuery } = useEcommerce();
+  const { publishedProducts, categories, searchQuery, setSearchQuery, currentTheme } = useEcommerce();
 
   const [activeCategory, setActiveCategory] = useState<string>(selectedCategorySlug || 'all');
   const [sortBy, setSortBy] = useState<
@@ -80,10 +80,13 @@ export const StoreCatalog: React.FC<StoreCatalogProps> = ({
 
   return (
     <section id="catalog" className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-6 space-y-4">
-      {/* 1. Temu Style Catalog Header with Quick Sorting & Active Matches */}
+      {/* 1. Catalog Header with Quick Sorting & Active Matches */}
       <div className="bg-white rounded-2xl p-3 sm:p-4 border border-gray-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-orange-100 text-[#FA5D00] flex items-center justify-center font-bold">
+          <div
+            className="w-8 h-8 rounded-lg text-white flex items-center justify-center font-bold shadow-xs"
+            style={{ backgroundColor: currentTheme.primaryColor }}
+          >
             <Flame className="w-5 h-5 fill-current" />
           </div>
           <div>
@@ -125,9 +128,12 @@ export const StoreCatalog: React.FC<StoreCatalogProps> = ({
           }}
           className={`px-3.5 py-1.5 text-xs font-bold rounded-full transition-all shrink-0 cursor-pointer ${
             activeCategory === 'all'
-              ? 'bg-[#FA5D00] text-white shadow-sm'
+              ? 'text-white shadow-sm'
               : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
           }`}
+          style={{
+            backgroundColor: activeCategory === 'all' ? currentTheme.primaryColor : undefined
+          }}
         >
           All Items ({publishedProducts.length})
         </button>
@@ -141,9 +147,12 @@ export const StoreCatalog: React.FC<StoreCatalogProps> = ({
               onClick={() => setActiveCategory(cat.slug)}
               className={`px-3.5 py-1.5 text-xs font-bold rounded-full transition-all shrink-0 cursor-pointer ${
                 isActive
-                  ? 'bg-[#FA5D00] text-white shadow-sm'
+                  ? 'text-white shadow-sm'
                   : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
               }`}
+              style={{
+                backgroundColor: isActive ? currentTheme.primaryColor : undefined
+              }}
             >
               {cat.name} ({count})
             </button>

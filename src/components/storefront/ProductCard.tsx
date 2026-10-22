@@ -9,7 +9,7 @@ interface ProductCardProps {
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) => {
-  const { formatPrice, addToCart, toggleWishlist, isWishlisted, trackPixelEvent } = useEcommerce();
+  const { formatPrice, addToCart, toggleWishlist, isWishlisted, trackPixelEvent, currentTheme } = useEcommerce();
   const [isAdded, setIsAdded] = useState(false);
   const wishlisted = isWishlisted(product.id);
 
@@ -43,9 +43,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) =
   return (
     <div
       onClick={() => onSelect(product)}
-      className="group relative flex flex-col bg-white hover:bg-white rounded-xl sm:rounded-2xl border border-gray-100 hover:border-orange-200 overflow-hidden shadow-xs hover:shadow-xl transition-all duration-200 cursor-pointer select-none"
+      className="group relative flex flex-col bg-white hover:bg-white rounded-xl sm:rounded-2xl border border-gray-100 hover:border-slate-300 overflow-hidden shadow-xs hover:shadow-xl transition-all duration-200 cursor-pointer select-none"
     >
-      {/* 1. Image Container with Temu Badges & Wishlist */}
+      {/* 1. Image Container with Badges & Wishlist */}
       <div className="relative aspect-square w-full overflow-hidden bg-gray-50">
         <img
           src={product.primaryImage}
@@ -54,9 +54,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) =
           loading="lazy"
         />
 
-        {/* Top-Left: Discount Badge (Temu Red/Orange Style) */}
+        {/* Top-Left: Discount Badge */}
         {product.discountPercent && product.discountPercent > 0 ? (
-          <div className="absolute top-2 left-2 bg-[#FA5D00] text-white font-black text-[10px] sm:text-xs px-1.5 py-0.5 rounded-md shadow-xs">
+          <div
+            className="absolute top-2 left-2 text-white font-black text-[10px] sm:text-xs px-1.5 py-0.5 rounded-md shadow-xs"
+            style={{ backgroundColor: currentTheme.primaryColor }}
+          >
             -{product.discountPercent}%
           </div>
         ) : (
@@ -123,8 +126,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) =
         <div className="pt-1 border-t border-gray-100 flex items-end justify-between gap-1">
           <div>
             <div className="flex items-baseline gap-1.5 flex-wrap">
-              {/* Bold Temu Orange Price */}
-              <span className="font-black text-sm sm:text-base text-[#FA5D00] font-sans">
+              {/* Bold Dynamic Theme Price */}
+              <span
+                className="font-black text-sm sm:text-base font-sans"
+                style={{ color: currentTheme.primaryColor }}
+              >
                 {formatPrice(product.price)}
               </span>
               {product.compareAtPrice && (
@@ -140,7 +146,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) =
             </div>
           </div>
 
-          {/* Quick Add To Cart Button (Temu Style) */}
+          {/* Quick Add To Cart Button */}
           <button
             onClick={handleAddToCart}
             disabled={isOutOfStock}
@@ -149,8 +155,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) =
                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                 : isAdded
                 ? 'bg-emerald-500 text-white scale-110'
-                : 'bg-[#FA5D00] hover:bg-[#E04D00] text-white hover:scale-105 active:scale-95'
+                : 'text-white hover:scale-105 active:scale-95'
             }`}
+            style={{
+              backgroundColor: !isOutOfStock && !isAdded ? currentTheme.primaryColor : undefined
+            }}
             title="Add to Shopping Cart"
           >
             {isAdded ? (

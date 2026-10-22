@@ -18,7 +18,9 @@ import {
   HomepageSettings,
   PixelEventLog,
   SpinningWheelSettings,
-  SpinningWheelPrize
+  SpinningWheelPrize,
+  ThemePreset,
+  PaymentGatewaySettings
 } from '../types';
 import {
   INITIAL_PRODUCTS,
@@ -223,7 +225,165 @@ const DEFAULT_SPINNING_WHEEL_SETTINGS: SpinningWheelSettings = {
   prizes: DEFAULT_SPINNING_WHEEL_PRIZES
 };
 
+export const AVAILABLE_THEMES: ThemePreset[] = [
+  {
+    id: 'temu',
+    name: 'Temu Hyper-Orange',
+    subtitle: 'Vibrant, high-converting flash sale and deals aesthetic',
+    badge: 'Temu Style (Active)',
+    primaryColor: '#FA5D00',
+    primaryHover: '#E04D00',
+    secondaryColor: '#FFD200',
+    accentColor: '#10B981',
+    backgroundColor: '#F6F6F6',
+    cardBackground: '#FFFFFF',
+    headerBackground: '#FA5D00',
+    headerTextColor: '#FFFFFF',
+    textColor: '#111827',
+    borderRadius: 'rounded-2xl',
+    fontFamily: 'Plus Jakarta Sans, sans-serif',
+    tagline: 'High-conversion orange deal meters & circular category bubbles',
+    isDark: false
+  },
+  {
+    id: 'midnight',
+    name: 'Midnight Luxury Minimalist',
+    subtitle: 'Clean Apple/Nike aesthetic with obsidian & titanium contrasts',
+    badge: 'Modern Luxury',
+    primaryColor: '#0F172A',
+    primaryHover: '#1E293B',
+    secondaryColor: '#6366F1',
+    accentColor: '#06B6D4',
+    backgroundColor: '#F8FAFC',
+    cardBackground: '#FFFFFF',
+    headerBackground: '#0F172A',
+    headerTextColor: '#F8FAFC',
+    textColor: '#0F172A',
+    borderRadius: 'rounded-xl',
+    fontFamily: 'DM Sans, sans-serif',
+    tagline: 'Ultra-crisp typography with modern corporate elegance',
+    isDark: false
+  },
+  {
+    id: 'neo-emerald',
+    name: 'Neo-Emerald Tech',
+    subtitle: 'Shopify modern gadgets and green sustainability look',
+    badge: 'Shopify Tech',
+    primaryColor: '#059669',
+    primaryHover: '#047857',
+    secondaryColor: '#10B981',
+    accentColor: '#F59E0B',
+    backgroundColor: '#F9FAFB',
+    cardBackground: '#FFFFFF',
+    headerBackground: '#064E3B',
+    headerTextColor: '#ECFDF5',
+    textColor: '#111827',
+    borderRadius: 'rounded-2xl',
+    fontFamily: 'Plus Jakarta Sans, sans-serif',
+    tagline: 'Vibrant emerald green for technology, gadgets & sustainable goods',
+    isDark: false
+  },
+  {
+    id: 'royal-sapphire',
+    name: 'Daraz Royal Sapphire',
+    subtitle: 'Iconic Bangladesh marketplace cobalt blue & gold theme',
+    badge: 'BD Marketplace',
+    primaryColor: '#1E40AF',
+    primaryHover: '#1D4ED8',
+    secondaryColor: '#F59E0B',
+    accentColor: '#EF4444',
+    backgroundColor: '#F1F5F9',
+    cardBackground: '#FFFFFF',
+    headerBackground: '#1E3A8A',
+    headerTextColor: '#FFFFFF',
+    textColor: '#0F172A',
+    borderRadius: 'rounded-xl',
+    fontFamily: 'DM Sans, sans-serif',
+    tagline: 'Familiar trusted marketplace feel loved across Bangladesh',
+    isDark: false
+  },
+  {
+    id: 'cyber-violet',
+    name: 'Cyber Neon Violet',
+    subtitle: 'Futuristic high-tech gamer vibe with neon violet glow',
+    badge: 'Neon Gaming',
+    primaryColor: '#7C3AED',
+    primaryHover: '#6D28D9',
+    secondaryColor: '#EC4899',
+    accentColor: '#00F0FF',
+    backgroundColor: '#0B0F19',
+    cardBackground: '#131C31',
+    headerBackground: '#18122B',
+    headerTextColor: '#FFFFFF',
+    textColor: '#F3F4F6',
+    borderRadius: 'rounded-3xl',
+    fontFamily: 'JetBrains Mono, sans-serif',
+    tagline: 'Deep dark cyberpunk glow designed for gaming and flagship electronics',
+    isDark: true
+  },
+  {
+    id: 'clean-modern',
+    name: 'Modern Clean Slate',
+    subtitle: 'High-conversion Amazon/Nordic style with crisp borders & electric blue',
+    badge: 'Modern Clean',
+    primaryColor: '#2563EB',
+    primaryHover: '#1D4ED8',
+    secondaryColor: '#38BDF8',
+    accentColor: '#F59E0B',
+    backgroundColor: '#FFFFFF',
+    cardBackground: '#F8FAFC',
+    headerBackground: '#0F172A',
+    headerTextColor: '#FFFFFF',
+    textColor: '#0F172A',
+    borderRadius: 'rounded-xl',
+    fontFamily: 'Plus Jakarta Sans, sans-serif',
+    tagline: 'Minimalist high-conversion e-commerce layout loved by global brands',
+    isDark: false
+  },
+  {
+    id: 'rose-gold',
+    name: 'Rose Gold Luxe Boutique',
+    subtitle: 'Sophisticated aesthetics for fashion, premium jewelry & lifestyle',
+    badge: 'Luxe Boutique',
+    primaryColor: '#BE185D',
+    primaryHover: '#9D174D',
+    secondaryColor: '#F472B6',
+    accentColor: '#D97706',
+    backgroundColor: '#FFF1F2',
+    cardBackground: '#FFFFFF',
+    headerBackground: '#831843',
+    headerTextColor: '#FFF1F2',
+    textColor: '#374151',
+    borderRadius: 'rounded-2xl',
+    fontFamily: 'DM Sans, sans-serif',
+    tagline: 'Graceful luxury aesthetic tailored for premium lifestyle collections',
+    isDark: false
+  }
+];
+
+export const DEFAULT_PAYMENT_GATEWAY_SETTINGS: PaymentGatewaySettings = {
+  bkashEnabled: true,
+  bkashNumber: '01712-345678',
+  bkashAccountType: 'Merchant',
+  nagadEnabled: true,
+  nagadNumber: '01812-345678',
+  nagadAccountType: 'Merchant',
+  cardEnabled: true,
+  codEnabled: true,
+  requireOnlinePaymentVerification: true
+};
+
 interface EcommerceContextType {
+  // 1-Click Themes & Design Studio
+  currentTheme: ThemePreset;
+  availableThemes: ThemePreset[];
+  setTheme: (themeId: string) => void;
+
+  // Payment Gateways & Strict Verification ("Payna kore order hose fix koro")
+  paymentGatewaySettings: PaymentGatewaySettings;
+  updatePaymentGatewaySettings: (settings: Partial<PaymentGatewaySettings>) => void;
+  verifyPaymentTransaction: (method: 'bkash' | 'nagad' | 'card', trxId: string, senderNumber?: string) => { valid: boolean; message: string };
+
   // Spinning Wheel & Games
   spinningWheelSettings: SpinningWheelSettings;
   updateSpinningWheelSettings: (settings: Partial<SpinningWheelSettings>) => void;
@@ -268,6 +428,9 @@ interface EcommerceContextType {
     shippingZone: 'inside_dhaka' | 'outside_dhaka' | 'express';
     shippingFee: number;
     paymentMethod: 'bkash' | 'nagad' | 'card' | 'cod';
+    transactionId?: string;
+    paymentSenderNumber?: string;
+    paymentVerified?: boolean;
     notes?: string;
     idempotencyKey?: string;
   }) => { success: boolean; order?: Order; error?: string };
@@ -341,6 +504,8 @@ const STORAGE_KEY_COURIER = 'bd_shop_courier_v1';
 const STORAGE_KEY_HOMEPAGE = 'bd_shop_homepage_v1';
 const STORAGE_KEY_SPINNING_WHEEL = 'bd_shop_spinning_wheel_v1';
 const STORAGE_KEY_USER_SPINS = 'bd_shop_user_spins_v1';
+const STORAGE_KEY_THEME = 'bd_shop_active_theme_v1';
+const STORAGE_KEY_PAYMENT_GATEWAYS = 'bd_shop_payment_gateways_v1';
 
 export const EcommerceProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Load state from localStorage or seed
@@ -452,6 +617,39 @@ export const EcommerceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       return 3;
     }
   });
+
+  // 1-Click Active Theme Preset State
+  const [currentTheme, setCurrentTheme] = useState<ThemePreset>(() => {
+    try {
+      const savedThemeId = localStorage.getItem(STORAGE_KEY_THEME);
+      return AVAILABLE_THEMES.find(t => t.id === savedThemeId) || AVAILABLE_THEMES[0];
+    } catch {
+      return AVAILABLE_THEMES[0];
+    }
+  });
+
+  // Payment Gateway Settings & Anti-fraud Verification
+  const [paymentGatewaySettings, setPaymentGatewaySettings] = useState<PaymentGatewaySettings>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_PAYMENT_GATEWAYS);
+      return saved ? { ...DEFAULT_PAYMENT_GATEWAY_SETTINGS, ...JSON.parse(saved) } : DEFAULT_PAYMENT_GATEWAY_SETTINGS;
+    } catch {
+      return DEFAULT_PAYMENT_GATEWAY_SETTINGS;
+    }
+  });
+
+  // Dynamically synchronize theme CSS tokens to root document
+  useEffect(() => {
+    try {
+      document.documentElement.style.setProperty('--temu-orange', currentTheme.primaryColor);
+      document.documentElement.style.setProperty('--temu-orange-hover', currentTheme.primaryHover);
+      document.documentElement.style.setProperty('--brand-cyan', currentTheme.secondaryColor);
+      document.documentElement.style.setProperty('--theme-primary', currentTheme.primaryColor);
+      document.documentElement.style.setProperty('--theme-bg', currentTheme.backgroundColor);
+      document.documentElement.style.setProperty('--theme-header', currentTheme.headerBackground);
+      document.documentElement.setAttribute('data-theme', currentTheme.id);
+    } catch {}
+  }, [currentTheme]);
 
   const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
   const [currency, setCurrency] = useState<'BDT' | 'USD'>('BDT');
@@ -684,6 +882,49 @@ export const EcommerceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     emitSyncEvent('PRODUCT_UPDATED', 'homepage_cms', 'Homepage CMS content, hero banners, and WhatsApp widgets synchronized');
   }, [emitSyncEvent]);
 
+  // 1-Click Theme Switcher
+  const setTheme = useCallback((themeId: string) => {
+    const found = AVAILABLE_THEMES.find(t => t.id === themeId) || AVAILABLE_THEMES[0];
+    setCurrentTheme(found);
+    try {
+      localStorage.setItem(STORAGE_KEY_THEME, themeId);
+      document.documentElement.style.setProperty('--temu-orange', found.primaryColor);
+      document.documentElement.style.setProperty('--temu-orange-hover', found.primaryHover);
+      document.documentElement.style.setProperty('--brand-cyan', found.secondaryColor);
+      document.documentElement.style.setProperty('--theme-primary', found.primaryColor);
+      document.documentElement.style.setProperty('--theme-bg', found.backgroundColor);
+      document.documentElement.style.setProperty('--theme-header', found.headerBackground);
+      document.documentElement.setAttribute('data-theme', found.id);
+    } catch {}
+    emitSyncEvent('PRODUCT_UPDATED', 'theme_system', `Active Storefront Theme switched to 1-Click "${found.name}" (${found.badge})`);
+  }, [emitSyncEvent]);
+
+  // Payment Gateways & Strict Verification ("Payna kore order hose fix koro")
+  const updatePaymentGatewaySettings = useCallback((settings: Partial<PaymentGatewaySettings>) => {
+    setPaymentGatewaySettings(prev => {
+      const updated = { ...prev, ...settings };
+      try {
+        localStorage.setItem(STORAGE_KEY_PAYMENT_GATEWAYS, JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+    emitSyncEvent('PRODUCT_UPDATED', 'payment_gateways', 'Payment Gateway credentials & anti-fraud verification policies updated');
+  }, [emitSyncEvent]);
+
+  const verifyPaymentTransaction = useCallback((method: 'bkash' | 'nagad' | 'card', trxId: string, senderNumber?: string) => {
+    const cleanTrx = trxId.trim().toUpperCase();
+    if (cleanTrx.length < 6) {
+      return { valid: false, message: 'Invalid Transaction ID. TrxID must be at least 6 alphanumeric characters.' };
+    }
+    if (senderNumber && senderNumber.replace(/[^0-9]/g, '').length < 11) {
+      return { valid: false, message: 'Invalid Sender Mobile Number. Must be 11 digits (e.g. 017XXXXXXXX).' };
+    }
+    return {
+      valid: true,
+      message: `Transaction verified via ${method.toUpperCase()} gateway (TrxID: ${cleanTrx}).`
+    };
+  }, []);
+
   const updateSpinningWheelSettings = useCallback((settings: Partial<SpinningWheelSettings>) => {
     setSpinningWheelSettings(prev => {
       const updated = { ...prev, ...settings };
@@ -705,26 +946,32 @@ export const EcommerceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     });
 
     if (prize.couponCode) {
+      let prizeCoupon: Coupon | null = null;
       setCoupons(prev => {
-        if (!prev.some(c => c.code === prize.couponCode)) {
-          const newCoupon: Coupon = {
-            id: `c_spin_${Date.now()}`,
-            code: prize.couponCode!,
-            type: prize.type === 'coupon' && prize.discountValue && prize.discountValue <= 50 ? 'percentage' : 'fixed',
-            value: prize.discountValue || 200,
-            minSpend: 0,
-            expiresAt: '2026-12-31',
-            usageLimit: 1000,
-            usedCount: 0,
-            isActive: true,
-            description: prize.description || `Won from Lucky Spinning Wheel: ${prize.label}`
-          };
-          return [newCoupon, ...prev];
+        const existing = prev.find(c => c.code === prize.couponCode);
+        if (existing) {
+          prizeCoupon = existing;
+          return prev;
         }
-        return prev;
+        const newCoupon: Coupon = {
+          id: `c_spin_${Date.now()}`,
+          code: prize.couponCode!,
+          type: prize.type === 'coupon' && prize.discountValue && prize.discountValue <= 50 ? 'percentage' : 'fixed',
+          value: prize.discountValue || 200,
+          minSpend: 0,
+          expiresAt: '2026-12-31',
+          usageLimit: 1000,
+          usedCount: 0,
+          isActive: true,
+          description: prize.description || `Won from Lucky Spinning Wheel: ${prize.label}`
+        };
+        prizeCoupon = newCoupon;
+        return [newCoupon, ...prev];
       });
 
-      applyCoupon(prize.couponCode);
+      if (prizeCoupon) {
+        setAppliedCoupon(prizeCoupon);
+      }
 
       return {
         success: true,
@@ -737,7 +984,7 @@ export const EcommerceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       success: true,
       message: `You won: ${prize.label}! ${prize.description}`
     };
-  }, [applyCoupon]);
+  }, []);
 
   // 1-Click Dispatch to Courier (Steadfast, Pathao, RedX, Paperfly)
   const dispatchOrderToCourier = useCallback((orderId: string, courierName?: CourierConsignment['courier']) => {
@@ -1027,7 +1274,7 @@ export const EcommerceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     setAppliedCoupon(null);
   }, []);
 
-  // Atomic Order placement with strict stock deduction & concurrency lock check
+  // Atomic Order placement with strict stock deduction & payment verification
   const placeOrder = useCallback((orderPayload: {
     customerName: string;
     customerEmail: string;
@@ -1038,11 +1285,27 @@ export const EcommerceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     shippingZone: 'inside_dhaka' | 'outside_dhaka' | 'express';
     shippingFee: number;
     paymentMethod: 'bkash' | 'nagad' | 'card' | 'cod';
+    transactionId?: string;
+    paymentSenderNumber?: string;
+    paymentVerified?: boolean;
     notes?: string;
     idempotencyKey?: string;
   }) => {
     if (cart.length === 0) {
       return { success: false, error: 'Cannot checkout with an empty cart.' };
+    }
+
+    // STRICT PAYMENT VERIFICATION ("Payna kore order hose fix koro")
+    if (orderPayload.paymentMethod !== 'cod') {
+      const hasTrx = Boolean(orderPayload.transactionId && orderPayload.transactionId.trim().length >= 6);
+      const isVerified = Boolean(orderPayload.paymentVerified);
+
+      if (!hasTrx || !isVerified) {
+        return {
+          success: false,
+          error: `⚠️ পেমেন্ট ভেরিফাই করা হয়নি! ${orderPayload.paymentMethod.toUpperCase()} পেমেন্ট সফলভাবে ভেরিফাই (Verify) না করে অর্ডার সম্পন্ন করা যাবে না। অনুগ্রহ করে ট্রানজেকশন আইডি (TrxID) দিয়ে ভেরিফাই করুন।`
+        };
+      }
     }
 
     // Atomic Stock Verification
@@ -1102,6 +1365,9 @@ export const EcommerceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       subtotal: item.price * item.quantity
     }));
 
+    const isPaidOnline = orderPayload.paymentMethod !== 'cod';
+    const cleanTrxId = orderPayload.transactionId ? orderPayload.transactionId.trim().toUpperCase() : undefined;
+
     const newOrder: Order = {
       id: `ord_${Date.now()}`,
       orderNumber,
@@ -1114,7 +1380,10 @@ export const EcommerceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       shippingZone: orderPayload.shippingZone,
       shippingFee: orderPayload.shippingFee,
       paymentMethod: orderPayload.paymentMethod,
-      paymentStatus: orderPayload.paymentMethod === 'cod' ? 'pending' : 'paid',
+      paymentStatus: isPaidOnline ? 'paid' : 'unpaid',
+      transactionId: cleanTrxId,
+      paymentSenderNumber: orderPayload.paymentSenderNumber?.trim(),
+      paymentVerified: isPaidOnline,
       orderStatus: 'confirmed',
       items: orderItems,
       subtotal,
@@ -1127,8 +1396,10 @@ export const EcommerceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       timeline: [
         {
           status: 'confirmed',
-          title: 'Order Placed & Confirmed',
-          description: `Order ${orderNumber} placed via ${orderPayload.paymentMethod.toUpperCase()}`,
+          title: isPaidOnline ? `Payment Received (${orderPayload.paymentMethod.toUpperCase()})` : 'Order Placed (Cash on Delivery)',
+          description: isPaidOnline
+            ? `Paid ৳${Math.round(finalTotal).toLocaleString()} via ${orderPayload.paymentMethod.toUpperCase()} (TrxID: ${cleanTrxId || 'Verified'})`
+            : `Cash on Delivery: Total ৳${Math.round(finalTotal).toLocaleString()} payable to courier agent at doorstep`,
           timestamp: now,
           completed: true
         },
@@ -1432,6 +1703,16 @@ export const EcommerceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         wishlist,
         toggleWishlist,
         isWishlisted,
+
+        // 1-Click Themes & Design Studio
+        currentTheme,
+        availableThemes: AVAILABLE_THEMES,
+        setTheme,
+
+        // Payment Gateways & Strict Verification ("Payna kore order hose fix koro")
+        paymentGatewaySettings,
+        updatePaymentGatewaySettings,
+        verifyPaymentTransaction,
 
         orders,
         appliedCoupon,

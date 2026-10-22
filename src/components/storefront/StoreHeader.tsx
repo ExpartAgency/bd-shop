@@ -17,7 +17,9 @@ import {
   Zap,
   Sparkles,
   ChevronDown,
-  Gift
+  Gift,
+  Palette,
+  Check
 } from 'lucide-react';
 import { Product } from '../../types';
 
@@ -27,6 +29,7 @@ interface StoreHeaderProps {
   onOpenTracking: () => void;
   onOpenAccount: () => void;
   onOpenInstall: () => void;
+  onOpenSpinningWheel?: () => void;
   onSelectProduct: (product: Product) => void;
   onSelectCategory?: (categorySlug: string) => void;
 }
@@ -37,6 +40,7 @@ export const StoreHeader: React.FC<StoreHeaderProps> = ({
   onOpenTracking,
   onOpenAccount,
   onOpenInstall,
+  onOpenSpinningWheel,
   onSelectProduct,
   onSelectCategory
 }) => {
@@ -52,11 +56,15 @@ export const StoreHeader: React.FC<StoreHeaderProps> = ({
     publishedProducts,
     categories,
     setIsAdminMode,
-    homepageSettings
+    homepageSettings,
+    currentTheme,
+    availableThemes,
+    setTheme
   } = useEcommerce();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
 
   // Suggested trending search tags (Temu style)
@@ -90,25 +98,98 @@ export const StoreHeader: React.FC<StoreHeaderProps> = ({
 
   return (
     <header className="sticky top-0 z-40 w-full bg-white shadow-sm border-b border-gray-200">
-      {/* 1. Temu Signature Top Promo Strip */}
-      <div className="bg-gradient-to-r from-[#FA5D00] via-[#FF5000] to-[#FA5D00] text-white px-3 sm:px-4 py-1.5 text-xs font-medium">
+      {/* 1. Dynamic Top Promo Strip with Active Theme */}
+      <div
+        className="text-white px-3 sm:px-4 py-1.5 text-xs font-medium transition-colors"
+        style={{
+          background: `linear-gradient(to right, ${currentTheme.headerBackground}, ${currentTheme.primaryColor})`
+        }}
+      >
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap text-[11px] sm:text-xs">
             <span className="bg-white/20 px-1.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider flex items-center gap-1">
               <Flame className="w-3 h-3 text-[#FFD200] fill-current" />
-              TEMU STYLE BD DEAL
+              {currentTheme.name.toUpperCase()}
             </span>
             <span className="truncate">
               {homepageSettings.announcementText || 'Free Shipping on all orders over ৳1,000 | 90-Day Free Returns'}
             </span>
             {homepageSettings.announcementCoupon && (
-              <span className="hidden sm:inline bg-white text-[#FA5D00] px-2 py-0.5 rounded-full font-mono font-bold text-[10px] shadow-sm">
+              <span className="hidden sm:inline bg-white text-slate-900 px-2 py-0.5 rounded-full font-mono font-bold text-[10px] shadow-sm">
                 Use: {homepageSettings.announcementCoupon}
               </span>
             )}
           </div>
 
-          <div className="hidden md:flex items-center gap-4 text-xs font-medium shrink-0">
+          <div className="hidden md:flex items-center gap-3.5 text-xs font-medium shrink-0">
+            {/* 1-Click Theme Switcher Popover */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setIsThemeMenuOpen(prev => !prev)}
+                className="hover:scale-105 flex items-center gap-1.5 cursor-pointer bg-white/20 hover:bg-white/30 text-white font-bold px-2.5 py-0.5 rounded-full transition-all text-[11px] border border-white/25 shadow-xs"
+                title="1-Click Theme Engine"
+              >
+                <Palette className="w-3 h-3 text-yellow-300" />
+                <span>Theme: {currentTheme.badge}</span>
+                <ChevronDown className="w-3 h-3 opacity-70" />
+              </button>
+
+              {isThemeMenuOpen && (
+                <div
+                  className="absolute right-0 mt-2 w-64 bg-slate-950 text-slate-100 rounded-2xl shadow-2xl border border-slate-800 py-2.5 z-50 text-xs animate-fadeIn"
+                  onClick={e => e.stopPropagation()}
+                >
+                  <div className="px-3 py-1 text-[10px] uppercase font-bold text-slate-400 font-mono flex items-center justify-between">
+                    <span>1-Click Modern Themes</span>
+                    <span className="text-[9px] text-cyan-400">Instant Switch</span>
+                  </div>
+                  <div className="space-y-0.5 mt-1">
+                    {availableThemes.map(t => {
+                      const isCur = currentTheme.id === t.id;
+                      return (
+                        <button
+                          key={t.id}
+                          type="button"
+                          onClick={() => {
+                            setTheme(t.id);
+                            setIsThemeMenuOpen(false);
+                          }}
+                          className={`w-full text-left px-3 py-2 hover:bg-slate-900 flex items-center justify-between transition-colors cursor-pointer ${
+                            isCur ? 'bg-slate-900/90 font-bold' : ''
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <span
+                              className="w-3.5 h-3.5 rounded-full shadow-xs border border-white/20 shrink-0"
+                              style={{ backgroundColor: t.primaryColor }}
+                            />
+                            <div>
+                              <div className="text-white text-xs">{t.name}</div>
+                              <div className="text-[10px] text-slate-400 font-normal">{t.badge}</div>
+                            </div>
+                          </div>
+                          {isCur && <Check className="w-4 h-4 text-emerald-400 shrink-0" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Lucky Wheel Spin & Win Button */}
+            {onOpenSpinningWheel && (
+              <button
+                onClick={onOpenSpinningWheel}
+                className="hover:scale-105 flex items-center gap-1.5 cursor-pointer bg-yellow-400 hover:bg-yellow-300 text-gray-950 font-black px-2.5 py-0.5 rounded-full transition-all shadow-xs text-[11px]"
+                title="Spin & Win Free Gift & Coupons"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-orange-600 fill-current" />
+                <span>🎁 Spin & Win</span>
+              </button>
+            )}
+
             {/* Direct PWA Install Button */}
             <button
               onClick={onOpenInstall}
@@ -116,7 +197,7 @@ export const StoreHeader: React.FC<StoreHeaderProps> = ({
               title="Install BD SHOP App"
             >
               <Download className="w-3.5 h-3.5" />
-              <span>Install App (Get ৳200)</span>
+              <span>Install App</span>
             </button>
             <span className="opacity-40">|</span>
             <button
@@ -124,7 +205,7 @@ export const StoreHeader: React.FC<StoreHeaderProps> = ({
               className="hover:underline flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <Truck className="w-3.5 h-3.5" />
-              <span>Order Tracking</span>
+              <span>Tracking</span>
             </button>
             <span className="opacity-40">|</span>
             <button
@@ -469,6 +550,27 @@ export const StoreHeader: React.FC<StoreHeaderProps> = ({
                 >
                   All Products
                 </a>
+                {onOpenSpinningWheel && (
+                  <button
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      onOpenSpinningWheel();
+                    }}
+                    className="w-full text-left px-3 py-2 rounded-lg bg-yellow-50 text-yellow-800 font-bold flex items-center gap-2"
+                  >
+                    <span>🎁 Lucky Wheel (Free Gifts & Coupons)</span>
+                  </button>
+                )}
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    onOpenInstall();
+                  }}
+                  className="w-full text-left px-3 py-2 rounded-lg hover:bg-orange-50 hover:text-[#FA5D00] flex items-center gap-2"
+                >
+                  <Download className="w-4 h-4 text-[#FA5D00]" />
+                  <span>Install BD SHOP App</span>
+                </button>
                 <button
                   onClick={() => {
                     setIsMobileMenuOpen(false);

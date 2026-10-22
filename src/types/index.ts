@@ -105,7 +105,10 @@ export interface Order {
   shippingZone: 'inside_dhaka' | 'outside_dhaka' | 'express';
   shippingFee: number;
   paymentMethod: 'bkash' | 'nagad' | 'card' | 'cod';
-  paymentStatus: 'pending' | 'paid' | 'failed';
+  paymentStatus: 'pending' | 'paid' | 'failed' | 'unpaid';
+  transactionId?: string;
+  paymentSenderNumber?: string;
+  paymentVerified?: boolean;
   orderStatus: 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
   items: OrderItem[];
   subtotal: number;
@@ -289,6 +292,38 @@ export interface HomepageSettings {
   guaranteeText2?: string;
   guaranteeText3?: string;
   guaranteeText4?: string;
+}
+
+export interface ThemePreset {
+  id: string;
+  name: string;
+  subtitle: string;
+  badge: string;
+  primaryColor: string;
+  primaryHover: string;
+  secondaryColor: string;
+  accentColor: string;
+  backgroundColor: string;
+  cardBackground: string;
+  headerBackground: string;
+  headerTextColor: string;
+  textColor: string;
+  borderRadius: string;
+  fontFamily: string;
+  tagline: string;
+  isDark: boolean;
+}
+
+export interface PaymentGatewaySettings {
+  bkashEnabled: boolean;
+  bkashNumber: string;
+  bkashAccountType: 'Merchant' | 'Personal';
+  nagadEnabled: boolean;
+  nagadNumber: string;
+  nagadAccountType: 'Merchant' | 'Personal';
+  cardEnabled: boolean;
+  codEnabled: boolean;
+  requireOnlinePaymentVerification: boolean; // "Payna kore order hose fix koro"
 }
 
 

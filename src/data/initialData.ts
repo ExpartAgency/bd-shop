@@ -2,10 +2,37 @@ import { Product, Category, Brand, Coupon, Order, Customer, ProductReview } from
 
 export const INITIAL_CATEGORIES: Category[] = [
   {
-    id: 'cat_electronics',
+    id: 'cat_gadgets',
+    name: 'Gadgets',
+    slug: 'gadgets',
+    description: 'Smart tech, Bluetooth audio, wireless earbuds, smart accessories.',
+    image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80',
+    iconName: 'Headphones',
+    productCount: 14
+  },
+  {
+    id: 'cat_healthcare',
+    name: 'Healthcare',
+    slug: 'healthcare',
+    description: 'Personal health devices, pulse oximeters, massage & wellness.',
+    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80',
+    iconName: 'Activity',
+    productCount: 8
+  },
+  {
+    id: 'cat_home_kitchen',
+    name: 'Home & Kitchen',
+    slug: 'home-kitchen',
+    description: 'Modern cookware, coffee makers, smart blenders & kitchen tools.',
+    image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=600&q=80',
+    iconName: 'Home',
+    productCount: 7
+  },
+  {
+    id: 'cat_smartphones',
     name: 'Smartphones & Tech',
     slug: 'smartphones-tech',
-    description: 'Flagship smartphones, laptops, smart accessories, and audio gear.',
+    description: 'Flagship smartphones, chargers, cables & protective gear.',
     image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80',
     iconName: 'Smartphone',
     productCount: 12
@@ -45,19 +72,90 @@ export const INITIAL_CATEGORIES: Category[] = [
     image: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=600&q=80',
     iconName: 'Home',
     productCount: 7
+  },
+  {
+    id: 'cat_fashion',
+    name: 'Fashion & Apparel',
+    slug: 'fashion-apparel',
+    description: 'Modern minimalist streetwear, breathable fabrics & wallets.',
+    image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=600&q=80',
+    iconName: 'Tag',
+    productCount: 11
+  },
+  {
+    id: 'cat_beauty',
+    name: 'Beauty & Personal Care',
+    slug: 'beauty-personal-care',
+    description: 'Skin essentials, grooming kits, hair clippers & sonic care.',
+    image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80',
+    iconName: 'Sparkles',
+    productCount: 5
+  },
+  {
+    id: 'cat_automotive',
+    name: 'Automotive & Tools',
+    slug: 'automotive-tools',
+    description: 'Car phone mounts, tire inflators, dashcams & multi-tools.',
+    image: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=600&q=80',
+    iconName: 'Truck',
+    productCount: 4
+  },
+  {
+    id: 'cat_sports',
+    name: 'Sports & Outdoors',
+    slug: 'sports-outdoors',
+    description: 'Insulated water bottles, gym accessories & camping equipment.',
+    image: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80',
+    iconName: 'Activity',
+    productCount: 6
   }
 ];
 
 export const INITIAL_BRANDS: Brand[] = [
+  { id: 'b_inkax', name: 'Inkax', slug: 'inkax', origin: 'Hong Kong / BD Top Seller' },
   { id: 'b_apple', name: 'Apple', slug: 'apple', origin: 'USA' },
-  { id: 'b_sony', name: 'Sony Audio', slug: 'sony-audio', origin: 'Japan' },
-  { id: 'b_samsung', name: 'Samsung', slug: 'samsung', origin: 'South Korea' },
-  { id: 'b_keychron', name: 'Keychron', slug: 'keychron', origin: 'Hong Kong' },
-  { id: 'b_anker', name: 'Anker Innovations', slug: 'anker', origin: 'USA' },
-  { id: 'b_bd_artisan', name: 'Bengal Artisans', slug: 'bengal-artisans', origin: 'Bangladesh' }
+  { id: 'b_samsung', name: 'Samsung', slug: 'samsung', origin: 'South Korea' }
 ];
 
 export const INITIAL_PRODUCTS: Product[] = [
+  {
+    id: 'prod_inkax_01',
+    title: 'Inkax T02 Bluetooth Earbuds Pro Wireless Stereo',
+    slug: 'inkax-t02-bluetooth-earbuds',
+    sku: 'INK-T02-TWS-WHT',
+    categoryId: 'cat_gadgets',
+    categoryName: 'Gadgets',
+    brand: 'Inkax',
+    price: 1250,
+    compareAtPrice: 1650,
+    discountPercent: 24,
+    stock: 29,
+    lowStockThreshold: 5,
+    isPublished: true,
+    isFeatured: true,
+    shortDescription: 'Deep bass true wireless stereo with noise isolation and fast pairing.',
+    description: 'The Inkax T02 Bluetooth Earbuds deliver rich acoustic fidelity, ergonomic comfort fit, and instant magnetic pairing. Built with high-sensitivity touch controls, sweatproof nano-coating, and extended battery life with compact charging dock.',
+    primaryImage: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=900&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=900&q=85',
+      'https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?auto=format&fit=crop&w=900&q=85'
+    ],
+    variants: [
+      { id: 'v_t02_wht', name: 'Ceramic White', sku: 'INK-T02-WHT', price: 1250, stock: 20, attributes: { color: 'White' } },
+      { id: 'v_t02_blk', name: 'Matte Black', sku: 'INK-T02-BLK', price: 1250, stock: 9, attributes: { color: 'Black' } }
+    ],
+    specifications: {
+      'Bluetooth': 'v5.3 + EDR Ultra Low Latency',
+      'Playtime': 'Up to 24 Hours with Case',
+      'Charging Port': 'Type-C Fast Charge',
+      'Microphone': 'HD Environmental Noise Cancelation'
+    },
+    rating: 4.8,
+    reviewCount: 42,
+    tags: ['Best Seller', 'TWS', 'Inkax', 'Gadgets', 'Bluetooth Earbuds'],
+    createdAt: '2026-10-01T10:00:00.000Z',
+    updatedAt: '2026-10-19T10:00:00.000Z'
+  },
   {
     id: 'prod_001',
     title: 'Sony WH-1000XM5 Noise Canceling Headphones',
@@ -541,5 +639,115 @@ export const INITIAL_CUSTOMERS: Customer[] = [
     totalSpent: 289000,
     status: 'active',
     joinedAt: '2026-01-10'
+  },
+  {
+    id: 'cust_04',
+    name: 'Tania Sultana',
+    email: 'tania.sultana@apex.com.bd',
+    phone: '+880 1611-348291',
+    district: 'Dhaka (Uttara)',
+    ordersCount: 3,
+    totalSpent: 62000,
+    status: 'active',
+    joinedAt: '2026-06-12'
+  },
+  {
+    id: 'cust_05',
+    name: 'Kamrul Hasan',
+    email: 'kamrul.hasan@buet.ac.bd',
+    phone: '+880 1715-992014',
+    district: 'Rajshahi',
+    ordersCount: 5,
+    totalSpent: 115000,
+    status: 'active',
+    joinedAt: '2026-02-18'
+  },
+  {
+    id: 'cust_06',
+    name: 'Nusrat Jahan',
+    email: 'nusrat.designer@gmail.com',
+    phone: '+880 1521-884920',
+    district: 'Khulna',
+    ordersCount: 2,
+    totalSpent: 39000,
+    status: 'active',
+    joinedAt: '2026-07-04'
+  },
+  {
+    id: 'cust_07',
+    name: 'Ashraful Alam',
+    email: 'ashraf.cloud@outlook.com',
+    phone: '+880 1819-204192',
+    district: 'Dhaka (Mirpur)',
+    ordersCount: 4,
+    totalSpent: 84000,
+    status: 'active',
+    joinedAt: '2026-04-09'
+  },
+  {
+    id: 'cust_08',
+    name: 'Farhana Kabir',
+    email: 'farhana.kabir@brac.net',
+    phone: '+880 1914-638201',
+    district: 'Barisal',
+    ordersCount: 1,
+    totalSpent: 18500,
+    status: 'active',
+    joinedAt: '2026-08-14'
+  },
+  {
+    id: 'cust_09',
+    name: 'Ziaul Hoque',
+    email: 'ziaul.merchant@dhl.com',
+    phone: '+880 1713-448102',
+    district: 'Comilla',
+    ordersCount: 3,
+    totalSpent: 53000,
+    status: 'active',
+    joinedAt: '2026-03-29'
+  },
+  {
+    id: 'cust_10',
+    name: 'Rashedul Karim',
+    email: 'rashedul.karim@square.com.bd',
+    phone: '+880 1622-771920',
+    district: 'Mymensingh',
+    ordersCount: 2,
+    totalSpent: 31000,
+    status: 'active',
+    joinedAt: '2026-09-01'
+  },
+  {
+    id: 'cust_11',
+    name: 'Shirin Akhter',
+    email: 'shirin.architect@gmail.com',
+    phone: '+880 1811-903412',
+    district: 'Rangpur',
+    ordersCount: 1,
+    totalSpent: 14500,
+    status: 'active',
+    joinedAt: '2026-09-19'
+  },
+  {
+    id: 'cust_12',
+    name: 'Tanvir Hossain',
+    email: 'tanvir.dev@softbd.com',
+    phone: '+880 1729-110293',
+    district: 'Dhaka (Gulshan)',
+    ordersCount: 5,
+    totalSpent: 167000,
+    status: 'active',
+    joinedAt: '2026-02-05'
+  },
+  {
+    id: 'cust_13',
+    name: 'Mehnaz Chowdhury',
+    email: 'mehnaz.fin@standardbank.bd',
+    phone: '+880 1918-223940',
+    district: 'Gazipur',
+    ordersCount: 2,
+    totalSpent: 42000,
+    status: 'active',
+    joinedAt: '2026-10-02'
   }
 ];

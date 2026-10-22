@@ -10,6 +10,9 @@ import { OrderTrackingModal } from './components/storefront/OrderTrackingModal';
 import { CustomerAccountModal } from './components/storefront/CustomerAccountModal';
 import { StoreFooter } from './components/storefront/StoreFooter';
 import { WhatsAppButton } from './components/storefront/WhatsAppButton';
+import { InstallAppButton } from './components/storefront/InstallAppButton';
+import { SpinningWheelFloatingButton } from './components/storefront/SpinningWheelFloatingButton';
+import { SpinningWheelModal } from './components/storefront/SpinningWheelModal';
 import { PwaInstallModal } from './components/common/PwaInstallModal';
 
 // Admin Components
@@ -22,9 +25,14 @@ import { AdminInventory } from './components/admin/AdminInventory';
 import { AdminCouriers } from './components/admin/AdminCouriers';
 import { AdminPixels } from './components/admin/AdminPixels';
 import { AdminHomepageCMS } from './components/admin/AdminHomepageCMS';
+import { AdminSpinningWheel } from './components/admin/AdminSpinningWheel';
 import { AdminCoupons } from './components/admin/AdminCoupons';
 import { AdminSystem } from './components/admin/AdminSystem';
 import { AdminArchitectureHub } from './components/admin/AdminArchitectureHub';
+import { AdminDesignStudio } from './components/admin/AdminDesignStudio';
+import { AdminCustomers } from './components/admin/AdminCustomers';
+import { AdminPaymentGateways } from './components/admin/AdminPaymentGateways';
+import { AdminReports } from './components/admin/AdminReports';
 
 import { Product, Order } from './types';
 import {
@@ -38,7 +46,8 @@ import {
   ArrowRight,
   Flame,
   User,
-  Download
+  Download,
+  Sparkles
 } from 'lucide-react';
 
 const MainAppContent: React.FC = () => {
@@ -51,6 +60,7 @@ const MainAppContent: React.FC = () => {
     wishlist,
     addToCart,
     homepageSettings,
+    spinningWheelSettings,
     trackPixelEvent
   } = useEcommerce();
 
@@ -62,6 +72,7 @@ const MainAppContent: React.FC = () => {
   const [trackingOrderNumber, setTrackingOrderNumber] = useState('');
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
+  const [isSpinningWheelOpen, setIsSpinningWheelOpen] = useState(false);
   const [selectedCategorySlug, setSelectedCategorySlug] = useState<string>('all');
 
   // PWA deferred prompt
@@ -96,45 +107,53 @@ const MainAppContent: React.FC = () => {
     );
   }, [trackPixelEvent]);
 
+  // Auto-open spinning wheel for visitors if configured
+  useEffect(() => {
+    if (spinningWheelSettings.enabled && spinningWheelSettings.autoOpenOnFirstVisit) {
+      try {
+        const hasVisited = sessionStorage.getItem('bd_spinning_wheel_auto_opened');
+        if (!hasVisited) {
+          sessionStorage.setItem('bd_spinning_wheel_auto_opened', 'true');
+          const timer = setTimeout(() => {
+            setIsSpinningWheelOpen(true);
+          }, 1800);
+          return () => clearTimeout(timer);
+        }
+      } catch {}
+    }
+  }, [spinningWheelSettings.enabled, spinningWheelSettings.autoOpenOnFirstVisit]);
+
   useEffect(() => {
     if (syncEvents.length > 0) {
       const latest = syncEvents[0];
       setLatestSyncToast(`${latest.type}: ${latest.message}`);
-      const timer = setTimeout(() => setLatestSyncToast(null), 4000);
+      const timer = setTimeout(() => {
+        setLatestSyncToast(null);
+      }, 3500);
       return () => clearTimeout(timer);
     }
   }, [syncEvents]);
 
-  // Handle URL hash /admin routing support
-  useEffect(() => {
-    if (window.location.pathname.startsWith('/admin') || window.location.hash === '#admin') {
-      setIsAdminMode(true);
-    }
-  }, [setIsAdminMode]);
+  const handleSelectProduct = (product: Product) => {
+    setSelectedProduct(product);
+  };
 
-  const handleDirectCheckout = (product: Product, quantity: number, variantId?: string) => {
-    addToCart(product, quantity, variantId);
+  const handleDirectCheckout = (product: Product) => {
+    addToCart(product, 1);
+    setSelectedProduct(null);
     setIsCheckoutOpen(true);
   };
 
   const handleOrderCompleted = (order: Order) => {
+    setIsCheckoutOpen(false);
     setTrackingOrderNumber(order.orderNumber);
-  };
-
-  const handleTrackFromAccount = (orderNumber: string) => {
-    setTrackingOrderNumber(orderNumber);
     setIsTrackingOpen(true);
   };
 
-  const handleSelectProduct = (product: Product) => {
-    setSelectedProduct(product);
-    trackPixelEvent('ViewContent', {
-      content_name: product.title,
-      content_ids: [product.id],
-      content_type: 'product',
-      value: product.price,
-      currency: 'BDT'
-    });
+  const handleTrackFromAccount = (orderNumber: string) => {
+    setIsAccountOpen(false);
+    setTrackingOrderNumber(orderNumber);
+    setIsTrackingOpen(true);
   };
 
   return (
@@ -163,7 +182,12 @@ const MainAppContent: React.FC = () => {
       {/* Conditionally Render: Admin Panel OR Temu-Style Customer Storefront */}
       {isAdminMode ? (
         <div className="flex-1 flex flex-col bg-slate-950 text-slate-100">
-          <AdminHeader onToggleMobileMenu={() => setIsMobileAdminSidebarOpen(true)} />
+          <AdminHeader
+            activeTab={activeAdminTab}
+            onSelectTab={setActiveAdminTab}
+            onOpenNewProduct={() => setActiveAdminTab('products')}
+            onToggleMobileMenu={() => setIsMobileAdminSidebarOpen(true)}
+          />
           <div className="flex-1 flex overflow-hidden">
             <AdminSidebar
               activeTab={activeAdminTab}
@@ -183,7 +207,12 @@ const MainAppContent: React.FC = () => {
               {activeAdminTab === 'inventory' && <AdminInventory />}
               {activeAdminTab === 'couriers' && <AdminCouriers />}
               {activeAdminTab === 'pixels' && <AdminPixels />}
+              {activeAdminTab === 'spinning-wheel' && <AdminSpinningWheel />}
               {activeAdminTab === 'cms' && <AdminHomepageCMS />}
+              {activeAdminTab === 'design-studio' && <AdminDesignStudio />}
+              {activeAdminTab === 'customers' && <AdminCustomers />}
+              {activeAdminTab === 'payment-gateways' && <AdminPaymentGateways />}
+              {activeAdminTab === 'reports' && <AdminReports onNavigateTab={setActiveAdminTab} />}
               {activeAdminTab === 'coupons' && <AdminCoupons />}
               {activeAdminTab === 'system' && <AdminSystem />}
               {activeAdminTab === 'architecture' && <AdminArchitectureHub />}
@@ -199,6 +228,7 @@ const MainAppContent: React.FC = () => {
             onOpenTracking={() => setIsTrackingOpen(true)}
             onOpenAccount={() => setIsAccountOpen(true)}
             onOpenInstall={() => setIsInstallModalOpen(true)}
+            onOpenSpinningWheel={() => setIsSpinningWheelOpen(true)}
             onSelectProduct={handleSelectProduct}
             onSelectCategory={slug => setSelectedCategorySlug(slug)}
           />
@@ -207,6 +237,7 @@ const MainAppContent: React.FC = () => {
             <StoreHero
               onSelectCategory={slug => setSelectedCategorySlug(slug)}
               onSelectProduct={handleSelectProduct}
+              onOpenSpinningWheel={() => setIsSpinningWheelOpen(true)}
             />
 
             <StoreCatalog
@@ -218,7 +249,13 @@ const MainAppContent: React.FC = () => {
 
           <StoreFooter />
 
-          {/* Floating WhatsApp Quick Inquirer Button */}
+          {/* Floating Install App Button (Left Side Bottom as requested) */}
+          <InstallAppButton onOpenInstall={() => setIsInstallModalOpen(true)} />
+
+          {/* Floating Spinning Wheel Trigger (Right side above WhatsApp) */}
+          <SpinningWheelFloatingButton onOpen={() => setIsSpinningWheelOpen(true)} />
+
+          {/* Floating WhatsApp Quick Inquirer Button (Right Side Bottom) */}
           <WhatsAppButton />
 
           {/* Mobile Bottom Navigation Bar (Temu App Style on Phones) */}
@@ -239,6 +276,17 @@ const MainAppContent: React.FC = () => {
               <span>Categories</span>
             </a>
 
+            <button
+              onClick={() => setIsSpinningWheelOpen(true)}
+              className="flex flex-col items-center gap-1 text-[10px] text-yellow-600 hover:text-yellow-700 font-black cursor-pointer"
+            >
+              <div className="relative">
+                <Sparkles className="w-5 h-5 fill-current text-yellow-500" />
+                <span className="absolute -top-1 -right-1 flex h-2 w-2 rounded-full bg-red-500 animate-ping" />
+              </div>
+              <span>Spin & Win</span>
+            </button>
+
             <a
               href="#lightning-deals"
               className="flex flex-col items-center gap-1 text-[10px] text-red-500 hover:text-red-600 font-bold"
@@ -246,19 +294,6 @@ const MainAppContent: React.FC = () => {
               <Flame className="w-5 h-5 fill-current" />
               <span>Deals</span>
             </a>
-
-            <button
-              onClick={() => setIsAccountOpen(true)}
-              className="relative flex flex-col items-center gap-1 text-[10px] text-gray-500 hover:text-black font-medium cursor-pointer"
-            >
-              <Heart className="w-5 h-5" />
-              <span>Saved</span>
-              {wishlist.length > 0 && (
-                <span className="absolute -top-1 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#FA5D00] text-[9px] font-bold text-white font-mono shadow-xs">
-                  {wishlist.length}
-                </span>
-              )}
-            </button>
 
             <button
               onClick={() => setIsCartOpen(true)}
@@ -314,6 +349,18 @@ const MainAppContent: React.FC = () => {
             onSelectProduct={handleSelectProduct}
           />
 
+          {/* Lucky Spinning Wheel Modal */}
+          <SpinningWheelModal
+            isOpen={isSpinningWheelOpen}
+            onClose={() => setIsSpinningWheelOpen(false)}
+            onExploreDeals={() => {
+              setIsSpinningWheelOpen(false);
+              const el = document.getElementById('catalog');
+              el?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          />
+
+          {/* PWA Install Guide Modal */}
           <PwaInstallModal
             isOpen={isInstallModalOpen}
             onClose={() => setIsInstallModalOpen(false)}
